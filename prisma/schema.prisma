@@ -1,0 +1,34 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider  = "postgresql"
+    url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+    directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Post {
+    id        String  @id @default(cuid())
+    title     String
+    content   String?
+    published Boolean @default(false)
+    author    User?   @relation(fields: [authorId], references: [id])
+    authorId  String?
+}
+// 这段代码定义了一个Post模型，并说明了它与User模型之间存在一对多（一个用户可以发表多篇文章）或一对一（如果每个帖子只有一个作者）的关系。关键点如下：
+
+// authorId: 这是一个实际存储在数据库中的外键字段，用来保存与之关联的User模型的ID。
+// author: 这是一个虚拟字段，Prisma会根据authorId来解析和填充这个字段，实际上并不直接存储在数据库中，而是通过关系解析得到。
+// @relation(fields: [authorId], references: [id]): 这部分定义了关系的细节，说明authorId字段引用的是User模型的id字段。这意味着对于每一个Post记录，其authorId值应当对应于User表中某条记录的id值。
+// 这样的设置允许你在查询Post时，轻松地获取或操作与之关联的User信息，而无需手动处理JOIN操作。Prisma会在幕后处理这些关系的解析和管理。
+model User {
+    id        String   @id @default(cuid())
+    name      String?
+    email     String?  @unique
+    createdAt DateTime @default(now()) @map(name: "created_at")
+    updatedAt DateTime @updatedAt @map(name: "updated_at")
+    posts     Post[]
+
+    @@map(name: "users")
+}
