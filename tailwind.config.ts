@@ -5,10 +5,12 @@ const { nextui } = require("@nextui-org/react");
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/pages/**/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
+  important: true,
   theme: {
     extend: {
       backgroundImage: {
@@ -31,7 +33,7 @@ const config: Config = {
           layout: {}, // light theme layout tokens
           colors: {
             background: "#ffffff",
-            foreground: "#0D001A",
+            foreground: "#1a1a1a",
             primary: {
               50: "#091A7A",
               100: "#102693",
@@ -52,7 +54,7 @@ const config: Config = {
         dark: {
           layout: {}, // dark theme layout tokens
           colors: {
-            background: "#0D001A",
+            background: "#1a1a1a",
             foreground: "#ffffff",
             primary: {
               50: "#3B096C",
