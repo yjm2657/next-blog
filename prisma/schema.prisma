@@ -2,8 +2,12 @@ generator client {
     provider = "prisma-client-js"
 }
 
-//修改后要同步 npx prisma generate 
-//npx prisma migrate dev
+//修改后要同步 1 npx prisma generate 
+//2  npx prisma migrate dev --name 迁移数据库
+// npx prisma migrate up 确认迁移  好像不需要了
+// npx prisma migrate down 撤回迁移
+// npx prisma migrate info 查看迁移状态
+//npx prisma studio 表结构展示
 datasource db {
     provider  = "postgresql"
     url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
@@ -11,13 +15,16 @@ datasource db {
 }
 
 model Post {
-    id        String  @id @default(cuid())
+    // id        String  @id @default(cuid())
+    id        Int  @id @default(autoincrement())
     title     String
     type      String
     content   String?
     published Boolean @default(false)
     // author    User?   @relation(fields: [authorId], references: [id])
     authorId  String?
+    createdAt DateTime @default(now()) 
+    updatedAt DateTime @updatedAt
 }
 // 这段代码定义了一个Post模型，并说明了它与User模型之间存在一对多（一个用户可以发表多篇文章）或一对一（如果每个帖子只有一个作者）的关系。关键点如下：
 

@@ -16,6 +16,27 @@ export default function PastAdd() {
   ]);
   const [selectTag, setSelectTag] = useState<string>("iOS");
 
+  const handleSubmit = async () => {
+
+    const res = await fetch("/api/post", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify({
+        title: title,
+        content: content,
+        authorId: "1",
+        type: selectTag,
+      }),
+    });
+    const data = await res.json();
+    if (data.code == 200) {
+      router.back();
+    }
+  };
+
   return (
     <div className="flex flex-row">
       <div className="max-w-md mt-6 flex flex-col gap-y-6">
@@ -55,8 +76,16 @@ export default function PastAdd() {
             </Chip>
           ))}
         </div>
-        <Textarea label="内容" placeholder="请输入内容" />
-        <Button size="lg" color="secondary">
+        <Textarea label="内容" placeholder="请输入内容" onChange={(e)=>{
+          setContent(e.target.value)
+        }}/>
+        <Button
+          size="lg"
+          color="secondary"
+          onClick={() => {
+            handleSubmit();
+          }}
+        >
           提交
         </Button>
       </div>
